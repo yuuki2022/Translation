@@ -16,12 +16,13 @@ private:
     QString resultMessage;
 public:
     Client(QObject* parent = nullptr) : QObject(parent)
-       {
-         client = new QTcpSocket(this);
-       }
+    {
+        client = new QTcpSocket(this);
+    }
 
     void initClient(const QString& ip, quint16 port);
     void sendMessage(const QString& mes);
+    void sendMessage(const QByteArray &mes);
     ~Client();
 public slots:
     void readData()

@@ -22,6 +22,10 @@ void Client::sendMessage(const QString &mes)
     qDebug() << "sendMessage: "<<mes;
 }
 
+void Client::sendMessage(const QByteArray &mes){
+    client->write(mes);
+}
+
 
 
 Client::~Client()
