@@ -6,6 +6,7 @@
 #include <QObject>
 #include "DatabaseProcess.h"
 
+
 class Server:public QObject
 {
 Q_OBJECT
@@ -16,8 +17,10 @@ public:
     Server();
     void initSocket();
     ~Server();
-    QString soundToString(QByteArray data);//sound api
+    QString soundToString(QString filename);//sound api
     QString translate(const QString& text,int option);//translate
+    QString saveAudioFile(const QByteArray& audioData, const QString& filename);
+    QByteArray execBash(QString& command);
 public slots:
     void newConnection()
      {
