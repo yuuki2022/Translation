@@ -1,6 +1,7 @@
 #include "Server.h"
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QCoreApplication>
 #include <QBuffer>
 #include <QAudioFormat>
@@ -159,83 +160,63 @@ QString Server::soundToString(QString filename)
 
     return fileContent;
 }
-// QString FDAPI(QString word)
-// {
+QString FDAPI(QString word)
+{
+    // Specify the URL of the API
+    QString apiUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + word; // Replace with the actual API URL
 
-//     // Create a network manager
-//     QNetworkAccessManager manager;
+    // Create a QNetworkAccessManager for making the request
+    QNetworkAccessManager manager;
 
-//     // Define the API URL
-//     QString apiUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/";
-//     QString url = apiUrl + word;
-//     // Create a network request
-//     QNetworkRequest request(url);
+    // Create a request object with the API URL
+    QNetworkRequest request(apiUrl);
 
-//     // Perform the GET request
-//     QNetworkReply *reply = manager.get(request);
+    // Send the GET request
+    QNetworkReply *reply = manager.get(request);
 
-//     // Create an event loop to wait for the request to finish
-//     QEventLoop loop;
-//     QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-//     loop.exec();
+    QString definition = "-1";
+    // Handle the response
+    QObject::connect(reply, &QNetworkReply::finished, [&]()
+                     {
+        if (reply->error() != QNetworkReply::NoError)
+        {
+            qDebug() << "Error: " << reply->errorString();
+            return;
+        }
 
-//     // Check for errors
-//     if (reply->error() != QNetworkReply::NoError)
-//     {
-//         qDebug() << "Error:" << reply->errorString();
-//         return "1";
-//     }
+        // Read the response data
+        QByteArray responseData = reply->readAll();
 
-//     // Read and parse the JSON response
-//     QByteArray responseData = reply->readAll();
-//     QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
+        // Parse the JSON response
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
+        QJsonObject jsonObject = jsonDoc.object();
+        if (jsonObject.contains("title") && jsonObject["title"].toString() == "No Definitions Found")
+        {
+            QString errorMessage = jsonObject["message"].toString();
+            qDebug() << "Error: " << errorMessage;// can not find the meaning
+            definition    = "-1";
+        }
+        else{
+            
+            // Extract the first definition
+            QJsonArray meanings = jsonObject["meanings"].toArray();
+            if (!meanings.isEmpty() && meanings[0].isObject())
+            {
+                QJsonObject firstMeaning = meanings[0].toObject();
+                QJsonArray definitions = firstMeaning["definitions"].toArray();
+                if (!definitions.isEmpty() && definitions[0].isObject())
+                {
+                    QJsonObject firstDefinition = definitions[0].toObject();
+                    QString definition = firstDefinition["definition"].toString();
+                    qDebug() << "Definition: " << definition;
+                }
+            }
+        }
 
-//     // Check if the JSON parsing was successful
-//     if (jsonResponse.isNull())
-//     {
-//         qDebug() << "Error parsing JSON response";
-//         return "1";
-//     }
-//     QJsonArray titleArray;
-//     QJsonValue titleValue = jsonResponse.array()[0].toObject()["title"];
-//     if (titleValue.isArray()) {
-//         titleArray = titleValue.toArray();
-//     }
-
-//     if (!titleArray.isEmpty()) {
-//         return "no meaning found";
-//     }
-//     // Extract the first meaning
-//     QJsonArray meanings = jsonResponse.array()[0].toObject()["meanings"].toArray();
-//     if (!meanings.isEmpty())
-//     {
-//         QJsonObject firstMeaning = meanings[0].toObject();
-//         QString partOfSpeech = firstMeaning["partOfSpeech"].toString();
-//         qDebug() << "Part of Speech:" << partOfSpeech;
-
-//         QJsonArray definitions = firstMeaning["definitions"].toArray();
-//         if (!definitions.isEmpty())
-//         {
-//             QJsonObject firstDefinition = definitions[0].toObject();
-//             QString definition = firstDefinition["definition"].toString();
-//             QString example = firstDefinition["example"].toString();
-//             qDebug() << "Definition:" << definition;
-//             qDebug() << "Example:" << example;
-//             return definition;
-//         }
-//         else
-//         {
-//             qDebug() << "No definitions found.";
-//         }
-//     }
-//     else
-//     {
-//         qDebug() << "No meanings found.";
-//     }
-
-//     // Clean up
-//     reply->deleteLater();
-// }
+            // Clean up
+            reply->deleteLater(); });
+    return definition;
+}
 QString Server::translate(const QString &text, int option)
 {
     // option = 0 : sen
@@ -244,17 +225,17 @@ QString Server::translate(const QString &text, int option)
     if (option == 1)
     {
         result = database->getTargetWord(text);
-        // if (result == "can't find the word")
-        // {
-        //     if (FDAPI(text) == "no meaning found")
-        //     {
-        //         return result;
-        //     }
-        //     else
-        //     {
-        //         return FDAPI(text);
-        //     }
-        // }
+        if (result == "can't find the word")
+        {
+            if (FDAPI(text) == "-1")
+            {
+                return result;
+            }
+            else
+            {
+                return FDAPI(text);
+            }
+        }
     }
     else if (option == 0)
     {
