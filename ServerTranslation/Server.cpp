@@ -257,7 +257,7 @@ QString Server::translate(const QString &text, int option)
         qDebug() << "python runned";
 
         // Read the output of the process
-        QString result = process->readAllStandardOutput();
+        result = process->readAllStandardOutput();
 
         // Delete the QProcess object when you're done with it
         process->deleteLater();
