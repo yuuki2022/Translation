@@ -240,17 +240,19 @@ QString Server::translate(const QString &text, int option)
     else if (option == 0)
     {
         qDebug()<<"text" + text;
-        QString command = "python3 ../../trans/test.py --en " + text;
+        QString arg = "\"";
+        arg = arg + text +"\" ";
+        QString command = "python3 ../../trans/test.py --en " + arg;
         // Create a QProcess instance dynamically (on the heap)
         QProcess *process = new QProcess();
 
         // Set the command to be executed
-//        process->start(command);
+        process->start(command);
         qDebug()<<command;
         qDebug() << "python running";
 
         // Wait for the process to finish (you can also connect signals for more control)
-        process->waitForFinished(-1);
+        process->waitForFinished();
 
         qDebug() << "python runned";
 
