@@ -9,7 +9,7 @@
 #include <QBuffer>
 #include <QMessageBox>
 
-const QString ip = "127.0.0.1";
+const QString ip = "172.27.35.96";
 const qint16 port = 8082;
 
 MainWindow::MainWindow(QWidget *parent)
