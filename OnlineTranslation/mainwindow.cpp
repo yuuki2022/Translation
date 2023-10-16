@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     init();
-    //define a client
+    //define a client  自然语言模型
     client = new Client();
     client->initClient(ip, port);
     ui->textEdit->setReadOnly(true);
@@ -101,14 +101,14 @@ void MainWindow::init()
                         "  background-color: #1f5a99;"
                         "}";
 
-    QString lineQss = "QLineEdit {"
-                      "background: #FDFDFD;"
-                      "selection-background-color: #8BF;"
-                      "border: 1px solid #999999;"
-                      "border-radius: 2px;"
-                      "border-style: inset;"
-                      "padding: 0 1px;"
-                      "}";
+//    QString lineQss = "QLineEdit {"
+//                      "background: #FDFDFD;"
+//                      "selection-background-color: #8BF;"
+//                      "border: 1px solid #999999;"
+//                      "border-radius: 2px;"
+//                      "border-style: inset;"
+//                      "padding: 0 1px;"
+//                      "}";
 
     QString textQss = "QTextEdit {"
                     "  border-radius: 5px;"
@@ -124,7 +124,7 @@ void MainWindow::init()
 
     ui->sentenceButton->setStyleSheet(buttonQss);
     ui->wordButton->setStyleSheet(buttonQss);
-    ui->lineEdit->setStyleSheet(lineQss);
+    ui->lineEdit->setStyleSheet("QLineEdit{ background-color: rgba(255,240,255,120); }QLineEdit:focus{background-color: rgb(255,255,255)}");
     ui->textEdit->setStyleSheet(textQss);
 }
 
