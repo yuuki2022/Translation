@@ -30,7 +30,7 @@ public slots:
         QByteArray data = client->readAll();
         resultMessage = QString(data);
         qDebug() << "Received data from server: " << data;
-
+        emit response();
     }
     QString getResultMessage()
     {
