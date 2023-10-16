@@ -10,6 +10,7 @@
 #include <QMessageBox>
 
 const QString ip = "172.27.35.96";
+//const QString ip = "127.0.0.1";
 const qint16 port = 8082;
 
 MainWindow::MainWindow(QWidget *parent)
@@ -24,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     
     connect(ui->wordButton,&QPushButton::clicked,this,[=](){
         QJsonObject jsonObject;
-        jsonObject["options"] = 0;  //0:word,1:sentence
+        jsonObject["options"] = 1;  //1:word,0:sentence
         jsonObject["content"] = ui->lineEdit->text();
         
         QJsonDocument jsonDocument(jsonObject);
@@ -34,7 +35,20 @@ MainWindow::MainWindow(QWidget *parent)
         //client->sendMessage(jsonString);
     });//click to send a word to its
     
+    connect(ui->sentenceButton,&QPushButton::clicked,this,[=](){
+        QJsonObject jsonObject;
+        jsonObject["options"] = 0;  //1:word,0:sentence
+        jsonObject["content"] = ui->lineEdit->text();
+
+        QJsonDocument jsonDocument(jsonObject);
+        QString jsonString = jsonDocument.toJson();
+        qDebug() << jsonString << "\n";
+        client->sendMessage(jsonString);
+        //client->sendMessage(jsonString);
+    });//click to send a word to its
+
     connect(client,&Client::response,this,[=](){
+        qDebug()<<"response result::\n";
         ui->textEdit->setText(client->getResultMessage());
     });
     

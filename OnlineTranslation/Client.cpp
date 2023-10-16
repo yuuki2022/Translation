@@ -1,6 +1,6 @@
 #include "Client.h"
 #include <QString>
-
+#include <QTime>
 
 
 void Client::initClient(const QString& ip,quint16 port)
@@ -8,7 +8,11 @@ void Client::initClient(const QString& ip,quint16 port)
       QHostAddress serverAddress(ip); // 服务器的IP地址
       quint16 serverPort = port; // 服务器的端口号
 
+      QDateTime currentDateTime = QDateTime::currentDateTime();
+      QString formattedTime = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
+      qDebug() << "connecting...   " << formattedTime;
       client->connectToHost(ip, serverPort); // 连接到服务器地址和端口
+
 
       connect(client, &QTcpSocket::connected, this, [=](){
           qDebug() << "Connected to server!";
@@ -18,8 +22,10 @@ void Client::initClient(const QString& ip,quint16 port)
 
 void Client::sendMessage(const QString &mes)
 {
+    QDateTime currentDateTime = QDateTime::currentDateTime();
+    QString formattedTime = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
     client->write(mes.toUtf8());
-    qDebug() << "sendMessage: "<<mes;
+    qDebug() << formattedTime  << ":" <<"sendMessage: "<<mes;
 }
 
 void Client::sendMessage(const QByteArray &mes){
