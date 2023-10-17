@@ -41,7 +41,6 @@ void Server::initSocket()
 {
     database->createDbConnection("stardict.db");
 
-    if (!tcpServer->listen(QHostAddress("0.0.0.0"), 8082))
     {
         qDebug() << "Server could not start!";
     }
