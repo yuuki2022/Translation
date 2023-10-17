@@ -22,6 +22,7 @@ public:
     QString getTargetWord(const QString& sourceWord);
     bool insertWord(const QString& word);
     bool updateWord(const QString& word);
+    QString getChineseWord(const QString& word);
     DatabaseProcess();
 };
 

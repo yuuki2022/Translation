@@ -68,7 +68,7 @@ void Server::initSocket()
 
                         int options = jsonObject["options"].toInt();
                         QString content = jsonObject["content"].toString();
-
+                        qDebug()<<"translate: .......------------------"<<options;
                         QString result =  this->translate(content, options);//translate Chinese to English
                                                                             //1:word 0:sentence
                         QString response = result;//remember to change "answer" to your result
@@ -237,7 +237,8 @@ QString Server::translate(const QString &text, int option)
 //        }
     }
     else if (option ==  2){
-        ;
+       qDebug()<<"zh-en";
+       result = database->getChineseWord(text);
     }
     else if (option == 0)
     {
