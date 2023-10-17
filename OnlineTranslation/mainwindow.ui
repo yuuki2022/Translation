@@ -96,27 +96,28 @@ QLineEdit:focus {
         <item>
          <widget class="QPushButton" name="wordButton">
           <property name="text">
-           <string>单词</string>
+           <string>单词（英-&gt;汉）</string>
           </property>
          </widget>
         </item>
         <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+         <widget class="QPushButton" name="chineseButton">
+          <property name="text">
+           <string>单词（汉-&gt;英）</string>
           </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
+         </widget>
         </item>
         <item>
          <widget class="QPushButton" name="sentenceButton">
           <property name="text">
-           <string>句子</string>
+           <string>句子（英-&gt;中）</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="chSentenceButton">
+          <property name="text">
+           <string>句子（中-&gt;英）</string>
           </property>
          </widget>
         </item>

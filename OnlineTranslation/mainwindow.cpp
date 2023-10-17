@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->textEdit->setReadOnly(true);
     this->setFixedSize(this->geometry().size());
     connect(ui->wordButton,&QPushButton::clicked,this,[=](){
+        ui->textEdit->setText("");
         QJsonObject jsonObject;
         jsonObject["options"] = 1;  //1:word,0:sentence
         jsonObject["content"] = ui->lineEdit->text();
@@ -38,7 +39,33 @@ MainWindow::MainWindow(QWidget *parent)
     
     connect(ui->sentenceButton,&QPushButton::clicked,this,[=](){
         QJsonObject jsonObject;
-        jsonObject["options"] = 0;  //1:word,0:sentence
+        ui->textEdit->setText("");
+        jsonObject["options"] = 0;  //2:zh-en 1:en-zh,0:sentence(en-zh) -1:sentence(zh-en)
+        jsonObject["content"] = ui->lineEdit->text();
+
+        QJsonDocument jsonDocument(jsonObject);
+        QString jsonString = jsonDocument.toJson();
+        qDebug() << jsonString << "\n";
+        client->sendMessage(jsonString);
+        //client->sendMessage(jsonString);
+    });//click to send a word to its
+
+    connect(ui->chSentenceButton,&QPushButton::clicked,this,[=](){
+        QJsonObject jsonObject;
+        ui->textEdit->setText("");
+        jsonObject["options"] = -1;  //2:zh-en 1:en-zh,0:sentence(en-zh) -1:sentence(zh-en)
+        jsonObject["content"] = ui->lineEdit->text();
+
+        QJsonDocument jsonDocument(jsonObject);
+        QString jsonString = jsonDocument.toJson();
+        qDebug() << jsonString << "\n";
+        client->sendMessage(jsonString);
+        //client->sendMessage(jsonString);
+    });//click to send a word to its
+    connect(ui->chineseButton,&QPushButton::clicked,this,[=](){
+        QJsonObject jsonObject;
+        ui->textEdit->setText("");
+        jsonObject["options"] = 2;  //2:zh-en 1:en-zh,0:sentence(en-zh) -1:sentence(zh-en)
         jsonObject["content"] = ui->lineEdit->text();
 
         QJsonDocument jsonDocument(jsonObject);
@@ -69,8 +96,8 @@ void MainWindow::init()
     QString buttonQss =   "QPushButton {"
                           "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #497BF0, stop:1 #1FB6F6);"
                           "    border: 2px solid #497BF0;"
-                          "    border-radius: 15px;"
-                          "    padding: 10px 20px;"
+                          "    border-radius: 5px;"
+                          "    padding: 3px 2px;"
                           "    color: #ffffff;"
                           "}"
                           "QPushButton:hover {"
@@ -114,6 +141,8 @@ void MainWindow::init()
             "    background-color: transparent;"
             "}"
         );
+    ui->chSentenceButton->setStyleSheet(buttonQss);
+    ui->chineseButton->setStyleSheet(buttonQss);
 
     ui->textEdit->setStyleSheet(textQss);
 }

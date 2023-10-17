@@ -1,7 +1,7 @@
 #include "Client.h"
 #include <QString>
 #include <QTime>
-
+#include <QTextEdit>\
 
 void Client::initClient(const QString& ip,quint16 port)
 {
@@ -30,6 +30,7 @@ void Client::sendMessage(const QString &mes)
 
 void Client::sendMessage(const QByteArray &mes)
 {
+
     client->write(mes);
 }
 
