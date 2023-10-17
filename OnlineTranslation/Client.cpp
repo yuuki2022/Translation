@@ -5,7 +5,7 @@
 
 void Client::initClient(const QString& ip,quint16 port)
 {
-      QHostAddress serverAddress(ip); // 服的IP地址
+      QHostAddress serverAddress(ip); // 服务器的IP地址
       quint16 serverPort = port; //
 
       QDateTime currentDateTime = QDateTime::currentDateTime();
