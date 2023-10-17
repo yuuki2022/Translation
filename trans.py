@@ -2,7 +2,7 @@ from transformers import MarianMTModel, MarianTokenizer
 import sys
 import os
 
-def english_to_chinese(text,model):
+def translate(text,model):
     model_name = model
     model = MarianMTModel.from_pretrained(model_name)
     tokenizer = MarianTokenizer.from_pretrained(model_name)
@@ -31,9 +31,9 @@ def main():
     
     if (sys.argv[1] == "en"):
     # en to zh
-        return(str(english_to_chinese(str(additional_arguments),str('Helsinki-NLP/opus-mt-en-zh'))))
+        return(str(translate(str(additional_arguments),str('Helsinki-NLP/opus-mt-en-zh'))))
     elif (sys.argv[1] == "zh"):
-        return(str(english_to_chinese(str(additional_arguments),'Helsinki-NLP/opus-mt-zh-en')))
+        return(str(translate(str(additional_arguments),'Helsinki-NLP/opus-mt-zh-en')))
     else:
         return ""
 if __name__ == "__main__":
