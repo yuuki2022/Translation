@@ -245,7 +245,7 @@ QString Server::translate(const QString &text, int option)
         qDebug()<<"text" + text;
         QString arg = "\"";
         arg = arg + text +"\" ";
-        QString command = "python3 ../../trans/trans.py en " + arg;
+        QString command = "python3 ../trans.py en " + arg;
         // Create a QProcess instance dynamically (on the heap)
         QProcess *process = new QProcess();
 
