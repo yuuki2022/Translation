@@ -55,26 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     
-    connect(ui->sound,&QPushButton::clicked,this,[=](){
-        QString filePath = QFileDialog::getOpenFileName(this, "open audio", "", "audio type(*.wav *.mp3 *.ogg);;all files(*.*)");
-        if (!filePath.isEmpty()) {
-            QFile audioFile(filePath);
-            
-            if (audioFile.open(QIODevice::ReadOnly)) {
-                while (!audioFile.atEnd()) {
-                    QByteArray data = audioFile.read(1024); // 从文件读取数据块
-                    client->sendMessage(data);
-                }
-                audioFile.close();
 
-
-            } else {
-                QMessageBox::warning(this, "warning", "please selece");
-            }
-        } else {
-            return;
-        }
-    });
 }
 
 MainWindow::~MainWindow()
@@ -85,32 +66,22 @@ MainWindow::~MainWindow()
 
 void MainWindow::init()
 {
-    QString buttonQss = "QPushButton {"
-                        "  background-color: #3498db;"
-                        "  color: #ffffff;"
-                        "  border: 1px solid #2980b9;"
-                        "  border-radius: 10px;"
-                        "  padding: 5px 10px;"
-                        "  min-width: 50px;"
-                        "  min-height: 20px;"
-                        "}"
-                        "QPushButton:hover {"
-                        "  background-color: #2980b9;"
-                        "}"
-                        "QPushButton:pressed {"
-                        "  background-color: #1f5a99;"
-                        "}";
-
-//    QString lineQss = "QLineEdit {"
-//                      "background: #FDFDFD;"
-//                      "selection-background-color: #8BF;"
-//                      "border: 1px solid #999999;"
-//                      "border-radius: 2px;"
-//                      "border-style: inset;"
-//                      "padding: 0 1px;"
-//                      "}";
+    QString buttonQss =   "QPushButton {"
+                          "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #497BF0, stop:1 #1FB6F6);"
+                          "    border: 2px solid #497BF0;"
+                          "    border-radius: 15px;"
+                          "    padding: 10px 20px;"
+                          "    color: #ffffff;"
+                          "}"
+                          "QPushButton:hover {"
+                          "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #1FB6F6, stop:1 #497BF0);"
+                          "}"
+                          "QPushButton:pressed {"
+                          "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #0E56B3, stop:1 #1FB6F6);"
+                          "}";
 
     QString textQss = "QTextEdit {"
+                      "border: 1px solid #A9ACB8"
                     "  border-radius: 5px;"
                     "  font-family: Arial;"
                     "  font-size: 14px;"
@@ -124,7 +95,26 @@ void MainWindow::init()
 
     ui->sentenceButton->setStyleSheet(buttonQss);
     ui->wordButton->setStyleSheet(buttonQss);
-    ui->lineEdit->setStyleSheet("QLineEdit{ background-color: rgba(255,240,255,120); }QLineEdit:focus{background-color: rgb(255,255,255)}");
+    ui->lineEdit->setStyleSheet(
+            "QLineEdit {"
+            "    border: 1px solid #A9ACB8;"
+            "    border-radius: 5px;"
+            "    padding: 3px;"
+            "    background-color: transparent;"
+            "    color: #000000;"
+            "    selection-background-color: #3498db;"
+            "    selection-color: #ffffff;"
+            "}"
+            "QLineEdit:hover {"
+            "    border: 2px solid #2980b9;"
+            "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #3498db, stop: 1 rgba(52, 152, 219, 100));"
+            "}"
+            "QLineEdit:focus {"
+            "    border: 2px solid #1f5a99;"
+            "    background-color: transparent;"
+            "}"
+        );
+
     ui->textEdit->setStyleSheet(textQss);
 }
 
