@@ -9,8 +9,8 @@
 #include <QBuffer>
 #include <QMessageBox>
 
-//const QString ip = "172.27.35.96";
-const QString ip = "127.0.0.1";
+const QString ip = "172.27.35.96";
+//const QString ip = "127.0.0.1";
 const qint16 port = 8082;
 
 MainWindow::MainWindow(QWidget *parent)
@@ -62,18 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
         client->sendMessage(jsonString);
         //client->sendMessage(jsonString);
     });//click to send a word to its
-    connect(ui->chineseButton,&QPushButton::clicked,this,[=](){
-        QJsonObject jsonObject;
-        ui->textEdit->setText("");
-        jsonObject["options"] = 2;  //2:zh-en 1:en-zh,0:sentence(en-zh) -1:sentence(zh-en)
-        jsonObject["content"] = ui->lineEdit->text();
 
-        QJsonDocument jsonDocument(jsonObject);
-        QString jsonString = jsonDocument.toJson();
-        qDebug() << jsonString << "\n";
-        client->sendMessage(jsonString);
-        //client->sendMessage(jsonString);
-    });//click to send a word to its
 
     connect(client,&Client::response,this,[=](){
         qDebug()<<"response result::\n";
@@ -142,7 +131,7 @@ void MainWindow::init()
             "}"
         );
     ui->chSentenceButton->setStyleSheet(buttonQss);
-    ui->chineseButton->setStyleSheet(buttonQss);
+
 
     ui->textEdit->setStyleSheet(textQss);
 }

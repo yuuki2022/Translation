@@ -103,14 +103,14 @@ QLineEdit:focus {
         <item>
          <widget class="QPushButton" name="sentenceButton">
           <property name="text">
-           <string>句子（英-&gt;中）</string>
+           <string>句子（英-&gt;汉）</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="chSentenceButton">
           <property name="text">
-           <string>句子（中-&gt;英）</string>
+           <string>句子（汉-&gt;英）</string>
           </property>
          </widget>
         </item>

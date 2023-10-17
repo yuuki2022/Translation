@@ -43,6 +43,39 @@ QString DatabaseProcess::getTargetWord(const QString &sourceWord)
     return result;
 }
 
+QString DatabaseProcess::getChineseWord(const QString &word)
+{
+
+    QSqlQuery query;
+    QString result;
+
+
+    QString command = QString("SELECT word FROM stardict  "
+                              "WHERE translation like '%%1%';")
+            .arg(word);
+    qDebug()<<command;
+    if(!query.exec(command)){
+        qDebug()<<query.lastError().text().toUtf8();
+    }else{
+        qDebug()<<"Yes";
+    }
+    qDebug() << command << "\n";
+
+    while (query.next()) {
+        result = query.value(0).toString();
+        result += "\n";
+    }
+    //query.exec(command);
+
+
+    if(result.isEmpty()){
+        result = "can't find the word";
+    }
+
+
+    return result;
+}
+
 DatabaseProcess::DatabaseProcess()
 {
 
