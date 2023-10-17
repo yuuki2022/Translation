@@ -224,15 +224,16 @@ QString Server::translate(const QString &text, int option)
     QString result;
     if (option == 1)
     {
-        result = database->getTargetWord(text);
-        if (result == "can't find the word")
-        {
+//        result = database->getTargetWord(text);
+        result = "can't find the word";
+        if (result ==  "can't find the word")
+        {qDebug()<<result;
             if (FDAPI(text) == "-1")
-            {
+            {qDebug()<<result;
                 return result;
             }
             else
-            {
+            {qDebug()<<result;
                 return FDAPI(text);
             }
         }
@@ -242,7 +243,7 @@ QString Server::translate(const QString &text, int option)
         qDebug()<<"text" + text;
         QString arg = "\"";
         arg = arg + text +"\" ";
-        QString command = "python3 ../../trans/test.py --en " + arg;
+        QString command = "python3 ../../trans/trans.py --en " + arg;
         // Create a QProcess instance dynamically (on the heap)
         QProcess *process = new QProcess();
 
