@@ -41,7 +41,6 @@ void Server::initSocket()
 {
     database->createDbConnection("stardict.db");
 
-    if (!tcpServer->listen(QHostAddress::AnyIPv4, 8082))
     {
         qDebug() << "Server could not start!";
     }
@@ -239,18 +238,30 @@ QString Server::translate(const QString &text, int option)
     }
     else if (option == 0)
     {
-        QString command = "python3 ../../trans/test.py --en " + text;
-        // Create a QProcess instance
-        QProcess process;
+        qDebug()<<"text" + text;
+        QString arg = "\"";
+        arg = arg + text +"\" ";
+        QString command = "python3 ../../trans/test.py --en " + arg;
+        // Create a QProcess instance dynamically (on the heap)
+        QProcess *process = new QProcess();
 
         // Set the command to be executed
-        process.start(command);
+        process->start(command);
+        qDebug()<<command;
+        qDebug() << "python running";
 
         // Wait for the process to finish (you can also connect signals for more control)
-        process.waitForFinished();
+        process->waitForFinished();
+
+        qDebug() << "python runned";
 
         // Read the output of the process
-        QString result = process.readAllStandardOutput();
+        result = process->readAllStandardOutput();
+
+        // Delete the QProcess object when you're done with it
+        process->deleteLater();
+
     }
+    qDebug()<<"result : "<<result;
     return result;
 }
