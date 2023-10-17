@@ -14,8 +14,6 @@ bool DatabaseProcess::createDbConnection(const QString &filePath, const QString 
 
 QString DatabaseProcess::getTargetWord(const QString &sourceWord)
 {
-    //1: English to Chinese
-    //0: Chinese to English
     QSqlQuery query;
     QString result;
 

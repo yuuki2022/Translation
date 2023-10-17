@@ -39,13 +39,11 @@ QByteArray Server::execBash(QString &command)
 
 void Server::initSocket()
 {
-    database->createDbConnection("stardict.db");
-
-    if (!tcpServer->listen(QHostAddress::AnyIPv4, 8082))
+   database->createDbConnection("stardict.db");
+   if (!tcpServer->listen(QHostAddress("0.0.0.0"), 8082))
     {
         qDebug() << "Server could not start!";
-    }
-    else
+    } else
     {
         qDebug() << "Server started on port 8082";
     }
@@ -160,63 +158,63 @@ QString Server::soundToString(QString filename)
 
     return fileContent;
 }
-QString FDAPI(QString word)
-{
-    // Specify the URL of the API
-    QString apiUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + word; // Replace with the actual API URL
+//QString FDAPI(QString word)
+//{
+//    // Specify the URL of the API
+//    QString apiUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + word; // Replace with the actual API URL
 
-    // Create a QNetworkAccessManager for making the request
-    QNetworkAccessManager manager;
+//    // Create a QNetworkAccessManager for making the request
+//    QNetworkAccessManager manager;
 
-    // Create a request object with the API URL
-    QNetworkRequest request(apiUrl);
+//    // Create a request object with the API URL
+//    QNetworkRequest request(apiUrl);
 
-    // Send the GET request
-    QNetworkReply *reply = manager.get(request);
+//    // Send the GET request
+//    QNetworkReply *reply = manager.get(request);
 
-    QString definition = "-1";
-    // Handle the response
-    QObject::connect(reply, &QNetworkReply::finished, [&]()
-                     {
-        if (reply->error() != QNetworkReply::NoError)
-        {
-            qDebug() << "Error: " << reply->errorString();
-            return;
-        }
+//    QString definition = "-1";
+//    // Handle the response
+//    QObject::connect(reply, &QNetworkReply::finished, [&]()
+//                     {
+//        if (reply->error() != QNetworkReply::NoError)
+//        {
+//            qDebug() << "Error: " << reply->errorString();
+//            return;
+//        }
 
-        // Read the response data
-        QByteArray responseData = reply->readAll();
+//        // Read the response data
+//        QByteArray responseData = reply->readAll();
 
-        // Parse the JSON response
-        QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
-        QJsonObject jsonObject = jsonDoc.object();
-        if (jsonObject.contains("title") && jsonObject["title"].toString() == "No Definitions Found")
-        {
-            QString errorMessage = jsonObject["message"].toString();
-            qDebug() << "Error: " << errorMessage;// can not find the meaning
-            definition    = "-1";
-        }
-        else{
+//        // Parse the JSON response
+//        QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
+//        QJsonObject jsonObject = jsonDoc.object();
+//        if (jsonObject.contains("title") && jsonObject["title"].toString() == "No Definitions Found")
+//        {
+//            QString errorMessage = jsonObject["message"].toString();
+//            qDebug() << "Error: " << errorMessage;// can not find the meaning
+//            definition    = "-1";
+//        }
+//        else{
             
-            // Extract the first definition
-            QJsonArray meanings = jsonObject["meanings"].toArray();
-            if (!meanings.isEmpty() && meanings[0].isObject())
-            {
-                QJsonObject firstMeaning = meanings[0].toObject();
-                QJsonArray definitions = firstMeaning["definitions"].toArray();
-                if (!definitions.isEmpty() && definitions[0].isObject())
-                {
-                    QJsonObject firstDefinition = definitions[0].toObject();
-                    QString definition = firstDefinition["definition"].toString();
-                    qDebug() << "Definition: " << definition;
-                }
-            }
-        }
+//            // Extract the first definition
+//            QJsonArray meanings = jsonObject["meanings"].toArray();
+//            if (!meanings.isEmpty() && meanings[0].isObject())
+//            {
+//                QJsonObject firstMeaning = meanings[0].toObject();
+//                QJsonArray definitions = firstMeaning["definitions"].toArray();
+//                if (!definitions.isEmpty() && definitions[0].isObject())
+//                {
+//                    QJsonObject firstDefinition = definitions[0].toObject();
+//                    QString definition = firstDefinition["definition"].toString();
+//                    qDebug() << "Definition: " << definition;
+//                }
+//            }
+//        }
 
-            // Clean up
-            reply->deleteLater(); });
-    return definition;
-}
+//            // Clean up
+//            reply->deleteLater(); });
+//    return definition;
+//}
 QString Server::translate(const QString &text, int option)
 {
     // option = 0 : sen
@@ -225,32 +223,72 @@ QString Server::translate(const QString &text, int option)
     if (option == 1)
     {
         result = database->getTargetWord(text);
-        if (result == "can't find the word")
-        {
-            if (FDAPI(text) == "-1")
-            {
-                return result;
-            }
-            else
-            {
-                return FDAPI(text);
-            }
-        }
+//        // result = "can't find the word";
+//        if (result ==  "can't find the word")
+//        {qDebug()<<result;
+//            if (FDAPI(text) == "-1")
+//            {qDebug()<<result;
+//                return result;
+//            }
+//            else
+//            {qDebug()<<result;
+//                return FDAPI(text);
+//            }
+//        }
+    }
+    else if (option ==  2){
+        ;
     }
     else if (option == 0)
     {
-        QString command = "python3 ../../trans/test.py --en " + text;
-        // Create a QProcess instance
-        QProcess process;
+        qDebug()<<"text" + text;
+        QString arg = "\"";
+        arg = arg + text +"\" ";
+        QString command = "python3 ../../trans/trans.py en " + arg;
+        // Create a QProcess instance dynamically (on the heap)
+        QProcess *process = new QProcess();
 
         // Set the command to be executed
-        process.start(command);
+        process->start(command);
+        qDebug()<<command;
+        qDebug() << "python running";
 
         // Wait for the process to finish (you can also connect signals for more control)
-        process.waitForFinished();
+        process->waitForFinished();
+
+        qDebug() << "python runned";
 
         // Read the output of the process
-        QString result = process.readAllStandardOutput();
+        result = process->readAllStandardOutput();
+
+        // Delete the QProcess object when you're done with it
+        process->deleteLater();
+
     }
+    else if (option == -1){
+        qDebug()<<"text" + text;
+        QString arg = "\"";
+        arg = arg + text +"\" ";
+        QString command = "python3 ../../trans/trans.py zh " + arg;
+        // Create a QProcess instance dynamically (on the heap)
+        QProcess *process = new QProcess();
+
+        // Set the command to be executed
+        process->start(command);
+        qDebug()<<command;
+        qDebug() << "python running";
+
+        // Wait for the process to finish (you can also connect signals for more control)
+        process->waitForFinished();
+
+        qDebug() << "python runned";
+
+        // Read the output of the process
+        result = process->readAllStandardOutput();
+
+        // Delete the QProcess object when you're done with it
+        process->deleteLater();
+    }
+    qDebug()<<"result : "<<result;
     return result;
 }
