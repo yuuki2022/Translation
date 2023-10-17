@@ -47,7 +47,7 @@
          <item>
           <widget class="QPushButton" name="sound">
            <property name="text">
-            <string>sound</string>
+            <string>音频文件</string>
            </property>
           </widget>
          </item>
@@ -63,7 +63,7 @@
        <item>
         <widget class="QPushButton" name="wordButton">
          <property name="text">
-          <string>word </string>
+          <string>单词</string>
          </property>
         </widget>
        </item>
@@ -83,7 +83,7 @@
        <item>
         <widget class="QPushButton" name="sentenceButton">
          <property name="text">
-          <string>sentence</string>
+          <string>句子</string>
          </property>
         </widget>
        </item>

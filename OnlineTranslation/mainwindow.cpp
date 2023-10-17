@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Online Translation Platform");
     init();
     //define a client  自然语言模型
     client = new Client();
@@ -28,7 +29,6 @@ MainWindow::MainWindow(QWidget *parent)
         QJsonObject jsonObject;
         jsonObject["options"] = 1;  //1:word,0:sentence
         jsonObject["content"] = ui->lineEdit->text();
-        
         QJsonDocument jsonDocument(jsonObject);
         QString jsonString = jsonDocument.toJson();
         qDebug() << jsonString << "\n";
