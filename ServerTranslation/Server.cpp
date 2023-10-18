@@ -4,9 +4,6 @@
 #include <QJsonArray>
 #include <QCoreApplication>
 #include <QBuffer>
-#include <QAudioFormat>
-#include <QAudioOutput>
-#include <QFile>
 #include <QProcess>
 #include <QCoreApplication>
 #include <QNetworkAccessManager>
@@ -39,11 +36,12 @@ QByteArray Server::execBash(QString &command)
 
 void Server::initSocket()
 {
-   database->createDbConnection("stardict.db");
-   if (!tcpServer->listen(QHostAddress("0.0.0.0"), 8082))
+    database->createDbConnection("stardict.db");
+    if (!tcpServer->listen(QHostAddress("0.0.0.0"), 8082))
     {
         qDebug() << "Server could not start!";
-    } else
+    }
+    else
     {
         qDebug() << "Server started on port 8082";
     }
@@ -68,7 +66,6 @@ void Server::initSocket()
 
                         int options = jsonObject["options"].toInt();
                         QString content = jsonObject["content"].toString();
-                        qDebug()<<"translate: .......------------------"<<options;
                         QString result =  this->translate(content, options);//translate Chinese to English
                                                                             //1:word 0:sentence
                         QString response = result;//remember to change "answer" to your result
@@ -78,10 +75,9 @@ void Server::initSocket()
                     }
                 } else {
                     qDebug() << "JSON can't be parsed: " << jsonParseError.errorString();
-                    QString content = soundToString(data); //record to text
-                    QString result =  translate(content,0);//translate Chinese to English
-                    QString response=result;//remember to change "answer" to your result
-                    clientSocket->write(response.toUtf8());
+
+
+
                 }
 
 
@@ -95,126 +91,6 @@ Server::~Server()
     delete database;
 }
 
-void writeWavHeader(QIODevice &device, const QAudioFormat &format, qint64 dataSize)
-{
-    // Write the WAV file header
-    device.write("RIFF");
-    device.write(reinterpret_cast<const char *>(&dataSize), sizeof(qint32)); // File size excluding the first 8 bytes
-    device.write("WAVE");
-    device.write("fmt ");
-    device.write(reinterpret_cast<const char *>(&format), sizeof(QAudioFormat));
-    device.write("data");
-    device.write(reinterpret_cast<const char *>(&dataSize), sizeof(qint32)); // Data size
-}
-
-QString Server::saveAudioFile(const QByteArray &audioData, const QString &filename = "audio.wav")
-{
-    // Set up the audio format
-    QAudioFormat format;
-    format.setSampleRate(16000); // 16kHz sample rate
-    format.setChannelCount(1);   // 1 channel (mono)
-    format.setSampleSize(16);    // 16-bit sample size
-    format.setCodec("audio/pcm");
-    format.setByteOrder(QAudioFormat::LittleEndian);
-    format.setSampleType(QAudioFormat::SignedInt);
-
-    // Open a file for writing
-    QFile file(filename);
-    if (!file.open(QIODevice::WriteOnly))
-    {
-        qDebug() << "Could not open file for writing:" << file.errorString();
-        return nullptr;
-    }
-
-    // Write the WAV file header
-    writeWavHeader(file, format, audioData.size());
-
-    // Write audio data to the file
-    file.write(audioData);
-
-    qDebug() << "WAV file saved:" << filename;
-    return filename;
-}
-
-QString Server::soundToString(QString filename)
-{
-
-    // Define the audio format (adjust these parameters based on your audio data)
-    QString command = "../../whisper.cpp/main ../Translation/ServerTranslation" + filename + "-otxt";
-    Server::execBash(command);
-    QFile file(filename);
-
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug() << "Could not open file for reading:" << file.errorString();
-        return "-1";
-    }
-
-    // Create a QTextStream to read the file
-    QTextStream in(&file);
-
-    // Read the full content of the file
-    QString fileContent = in.readAll();
-
-    return fileContent;
-}
-//QString FDAPI(QString word)
-//{
-//    // Specify the URL of the API
-//    QString apiUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + word; // Replace with the actual API URL
-
-//    // Create a QNetworkAccessManager for making the request
-//    QNetworkAccessManager manager;
-
-//    // Create a request object with the API URL
-//    QNetworkRequest request(apiUrl);
-
-//    // Send the GET request
-//    QNetworkReply *reply = manager.get(request);
-
-//    QString definition = "-1";
-//    // Handle the response
-//    QObject::connect(reply, &QNetworkReply::finished, [&]()
-//                     {
-//        if (reply->error() != QNetworkReply::NoError)
-//        {
-//            qDebug() << "Error: " << reply->errorString();
-//            return;
-//        }
-
-//        // Read the response data
-//        QByteArray responseData = reply->readAll();
-
-//        // Parse the JSON response
-//        QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
-//        QJsonObject jsonObject = jsonDoc.object();
-//        if (jsonObject.contains("title") && jsonObject["title"].toString() == "No Definitions Found")
-//        {
-//            QString errorMessage = jsonObject["message"].toString();
-//            qDebug() << "Error: " << errorMessage;// can not find the meaning
-//            definition    = "-1";
-//        }
-//        else{
-            
-//            // Extract the first definition
-//            QJsonArray meanings = jsonObject["meanings"].toArray();
-//            if (!meanings.isEmpty() && meanings[0].isObject())
-//            {
-//                QJsonObject firstMeaning = meanings[0].toObject();
-//                QJsonArray definitions = firstMeaning["definitions"].toArray();
-//                if (!definitions.isEmpty() && definitions[0].isObject())
-//                {
-//                    QJsonObject firstDefinition = definitions[0].toObject();
-//                    QString definition = firstDefinition["definition"].toString();
-//                    qDebug() << "Definition: " << definition;
-//                }
-//            }
-//        }
-
-//            // Clean up
-//            reply->deleteLater(); });
-//    return definition;
-//}
 QString Server::translate(const QString &text, int option)
 {
     // option = 0 : sen
@@ -223,35 +99,24 @@ QString Server::translate(const QString &text, int option)
     if (option == 1)
     {
         result = database->getTargetWord(text);
-//        // result = "can't find the word";
-//        if (result ==  "can't find the word")
-//        {qDebug()<<result;
-//            if (FDAPI(text) == "-1")
-//            {qDebug()<<result;
-//                return result;
-//            }
-//            else
-//            {qDebug()<<result;
-//                return FDAPI(text);
-//            }
-//        }
     }
-    else if (option ==  2){
-       qDebug()<<"zh-en";
-       result = database->getChineseWord(text);
+    else if (option == 2)
+    {
+        qDebug() << "zh-en";
+        result = database->getChineseWord(text);
     }
     else if (option == 0)
     {
-        qDebug()<<"text" + text;
+        qDebug() << "text" + text;
         QString arg = "\"";
-        arg = arg + text +"\" ";
+        arg = arg + text + "\" ";
         QString command = "python3 ../trans.py en " + arg;
         // Create a QProcess instance dynamically (on the heap)
         QProcess *process = new QProcess();
 
         // Set the command to be executed
         process->start(command);
-        qDebug()<<command;
+        qDebug() << command;
         qDebug() << "python running";
 
         // Wait for the process to finish (you can also connect signals for more control)
@@ -264,19 +129,19 @@ QString Server::translate(const QString &text, int option)
 
         // Delete the QProcess object when you're done with it
         process->deleteLater();
-
     }
-    else if (option == -1){
-        qDebug()<<"text" + text;
+    else if (option == -1)
+    {
+        qDebug() << "text" + text;
         QString arg = "\"";
-        arg = arg + text +"\" ";
+        arg = arg + text + "\" ";
         QString command = "python3 ../../trans/trans.py zh " + arg;
         // Create a QProcess instance dynamically (on the heap)
         QProcess *process = new QProcess();
 
         // Set the command to be executed
         process->start(command);
-        qDebug()<<command;
+        qDebug() << command;
         qDebug() << "python running";
 
         // Wait for the process to finish (you can also connect signals for more control)
@@ -290,6 +155,6 @@ QString Server::translate(const QString &text, int option)
         // Delete the QProcess object when you're done with it
         process->deleteLater();
     }
-    qDebug()<<"result : "<<result;
+    qDebug() << "result : " << result;
     return result;
 }
