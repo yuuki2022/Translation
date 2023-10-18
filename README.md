@@ -26,7 +26,7 @@ python3 trans.py zh "你好，世界！"
 to setup translation model
 
 ## Client configuation
-1. Open `OnlineTranslation/OnlineTranslation.pro`, if everything goes well, you can build and run this project.
+1. Open `OnlineTranslation/OnlineTranslation.pro` in `Qt Creator`, if everything goes well, you can build and run this project.
 
 ## Usage
 
