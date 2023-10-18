@@ -25,7 +25,7 @@ def translate(text,model):
 def main():
         # Check if there are at least two arguments (script name and at least one additional argument)
     if len(sys.argv) < 3:
-        return
+        return ""
     additional_arguments = sys.argv[2]
     
     if (sys.argv[1] == "en"):
