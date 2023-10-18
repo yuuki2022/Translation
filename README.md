@@ -27,7 +27,7 @@ python3 trans.py zh "你好，世界！" # Output should be "Hello, world!"
 ```
 to download and setup translation model
 
-## Client configuation
+## Client configuration
 1. Open `OnlineTranslation/OnlineTranslation.pro` in `Qt Creator`
 2. Open `OnlineTranslation/mainwindow.cpp` and change the variable `const QString ip` to server's IP address
 3. If everything goes well, you can build and run this project.
