@@ -1,5 +1,7 @@
 # Online Translation Platform
 [中文]()
+
+
 **DISCLAIMER: This project is only implemented and tested on linux, no guarantee for other opreation systems.**
 ## Setup
 1. Install `Qt Creator`
