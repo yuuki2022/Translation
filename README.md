@@ -17,7 +17,7 @@ pip install transformers
 
 **Please be aware that the server listens on port `8082`. Therefore, this port should not be occupied.**
 
-4. (Optional) Before running this project, running python code
+4. (Optional) Before running this project, running following python code
 ```shell
 python3 trans.py en "Hello, World!" # Output should be "你好,世界!"
 ```
