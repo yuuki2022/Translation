@@ -25,7 +25,6 @@ def translate(text,model):
 def main():
         # Check if there are at least two arguments (script name and at least one additional argument)
     if len(sys.argv) < 3:
-        print("Usage: python3 test.py --args <additional arguments>")
         return
     additional_arguments = sys.argv[2]
     
