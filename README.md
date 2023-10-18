@@ -1,9 +1,9 @@
 # Online Translation Platform
-[中文]()
+[中文](README-ZH.md)
 
-**DISCLAIMER: This project is only tested and implimented on linux, no guarantee for other opreation systems.**
+**DISCLAIMER: This project is only tested and implimented on Linux, no guarantee for other opreation systems.**
 ## Setup
-1. Install `Qt Creator`
+1. Install `Qt Creator` (Qt Creator 6.0.2 is recommended)
 2. Clone this repository
 
 ## Server configuration
