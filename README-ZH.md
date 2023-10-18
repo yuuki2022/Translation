@@ -7,17 +7,22 @@
 2. 克隆此仓库
 
 ## 服务器配置
-1. 安装 `transformers` Python 库
-```shell
-pip install transformers
-```
-2. [下载](https://github.com/skywind3000/ECDICT/releases/tag/1.0.28)所需的数据库 `ecdict-sqlite-28.zip` 并提取 `stardict.db` 进入`ServerTranslation`文件夹
 
-3. 在 `Qt 创造者` 中打开`ServerTranslation/ServerTranslation.pro`,如果一切顺利,你可以建造和运行这个项目。
+1. [下载](https://github.com/skywind3000/ECDICT/releases/tag/1.0.28)所需的数据库 `ecdict-sqlite-28.zip` 并提取 `stardict.db` 进入`ServerTranslation`文件夹
+
+2. 在 `Qt 创造者` 中打开`ServerTranslation/ServerTranslation.pro`,如果一切顺利,你可以建造和运行这个项目。
 
 **请注意服务器在“ 8082” 端口监听。 因此, 此端口不应被占用 。**
 
-4. (可选) 在运行此工程之前, 遵循 python 代码运行
+3. (**翻译用量**)在下面的链接安装`Pytorch`:
+https://pytorch.org/get-started/locally/
+
+4. (**翻译用量**)安装 `transformers` 和 `sentencepiece` Python 库
+```shell
+pip install transformers sentencepiece
+```
+
+5. (可选) 在运行此工程之前, 遵循 python 代码运行
 ```shell
 python3 trans.py en "Hello, World!" # 产出应 "你好,世界!"
 ```

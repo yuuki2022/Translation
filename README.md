@@ -7,17 +7,22 @@
 2. Clone this repository
 
 ## Server configuration
-1. Install `transformers` Python library 
-```shell
-pip install transformers
-```
-2. [Download](https://github.com/skywind3000/ECDICT/releases/tag/1.0.28) required database `ecdict-sqlite-28.zip` and extract `stardict.db` into `ServerTranslation` folder
 
-3. Open `ServerTranslation/ServerTranslation.pro` in `Qt Creator`, if everything goes well, you can build and run this project. 
+1. [Download](https://github.com/skywind3000/ECDICT/releases/tag/1.0.28) required database `ecdict-sqlite-28.zip` and extract `stardict.db` into `ServerTranslation` folder
+
+2. Open `ServerTranslation/ServerTranslation.pro` in `Qt Creator`, if everything goes well, you can build and run this project. 
 
 **Please be aware that the server listens on port `8082`. Therefore, this port should not be occupied.**
 
-4. (Optional) Before running this project, running following python code
+3. (**For Translation Usage**) Install `Pytorch` from the following link:
+https://pytorch.org/get-started/locally/
+
+4. (**For Translation Usage**) Install Python library `transformers` and `sentencepiece`
+```shell
+pip install transformers sentencepiece
+```
+
+5. (Optional) Before running this project, running following python code
 ```shell
 python3 trans.py en "Hello, World!" # Output should be "你好,世界!"
 ```
