@@ -41,3 +41,6 @@ to download and setup translation model
 
 The user interface is simple and intuitive.
 
+![Look up a word](assets/look_up_word.png)
+![English to Chinese](assets/en-zh.png)
+![Chinese to English](assets/zh-en.png)

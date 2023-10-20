@@ -3,7 +3,7 @@
 bool DatabaseProcess::createDbConnection(const QString &filePath, const QString &connectionName)
 {
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(filePath); //todo: change it to right path
+    db.setDatabaseName(filePath);
     if (!db.open()) {
         qDebug()<< "failed to open database!!" << db.lastError().text();
         return false;

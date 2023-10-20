@@ -40,3 +40,7 @@ python3 trans.py zh "你好，世界！" # 产出应 "Hello, world!"
 ## 用法
 
 用户界面既简单又直观。
+
+![查询词语](assets/look_up_word.png)
+![英文到中文](assets/en-zh.png)
+![中文到英文](assets/zh-en.png)
