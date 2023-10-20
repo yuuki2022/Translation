@@ -8,5 +8,7 @@ ServerTranslation.pro.user
 build-ServerTranslation-Desktop-Debug/*
 build-OnlineTranslation-Desktop-Debug/*
 build-ServerTranslation-Desktop-Debug/ServerTranslation
+build-ServerTranslation-Desktop-Release/*
+build-ServerTranslation-Desktop-Release/*
 
 translated.log
