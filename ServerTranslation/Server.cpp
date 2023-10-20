@@ -35,7 +35,9 @@ QByteArray Server::execBash(QString &command)
 }
 
 void Server::initSocket()
-{
+{   QProcess *process = new QProcess();
+    process->start("cp ../stardict.db stardict.db");
+    process->waitForFinished();
     database->createDbConnection("stardict.db");
     if (!tcpServer->listen(QHostAddress("0.0.0.0"), 8082))
     {

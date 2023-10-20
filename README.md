@@ -40,3 +40,4 @@ to download and setup translation model
 ## Usage
 
 The user interface is simple and intuitive.
+

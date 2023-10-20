@@ -9,6 +9,7 @@ build-ServerTranslation-Desktop-Debug/*
 build-OnlineTranslation-Desktop-Debug/*
 build-ServerTranslation-Desktop-Debug/ServerTranslation
 build-ServerTranslation-Desktop-Release/*
-build-ServerTranslation-Desktop-Release/*
+build-OnlineTranslation-Desktop-Release/*
 
 translated.log
+stardict.db
